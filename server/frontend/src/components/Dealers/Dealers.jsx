@@ -20,6 +20,8 @@ const Dealers = () => {
       method: "GET"
     });
     const retobj = await res.json();
+    console.log(retobj); // Add this line to print retobj
+
     if(retobj.status === 200) {
       let state_dealers = Array.from(retobj.dealers)
       setDealersList(state_dealers)
@@ -88,9 +90,9 @@ return(
           }
         </tr>
       ))}
-     </table>;
+     </table>
   </div>
 )
 }
 
-export default Dealers
+export default Dealers;
