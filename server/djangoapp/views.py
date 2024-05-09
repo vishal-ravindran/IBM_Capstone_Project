@@ -7,9 +7,7 @@ from .populate import initiate
 from .models import CarMake, CarModel
 from .restapis import get_request, analyze_review_sentiments, post_review
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
-
-
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
 
 # Get an instance of a logger
@@ -17,7 +15,6 @@ logger = logging.getLogger(__name__)
 
 
 # Create your views here.
-
 def get_cars(request):
     count = CarMake.objects.filter().count()
     print(count)
@@ -69,7 +66,7 @@ def registration(request):
     last_name = data['lastName']
     email = data['email']
     username_exist = False
-    email_exist = False
+    # email_exist = False
     try:
         # Check if user already exists
         User.objects.get(username=username)
@@ -142,9 +139,14 @@ def add_review(request):
     if not request.user.is_anonymous:
         data = json.loads(request.body)
         try:
-            response = post_review(data)
+            post_review(data)
+
             return JsonResponse({"status": 200})
-        except:
-            return JsonResponse({"status": 401, "message": "Error in posting review"})
+        except ValidationError as e:
+            return JsonResponse({
+                "status": 401,
+                "message": f"Error in posting review: {e}"
+            })
     else:
         return JsonResponse({"status": 403, "message": "Unauthorized"})
+
