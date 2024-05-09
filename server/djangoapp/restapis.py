@@ -1,7 +1,8 @@
 # Uncomment the following imports before adding the REST API code
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-import json
+from .models import CarMake, CarModel
+
 
 # @csrf_exempt
 # def car_make_list(request):
