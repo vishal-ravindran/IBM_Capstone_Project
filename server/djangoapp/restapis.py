@@ -17,9 +17,6 @@ def car_make_list(request):
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
 
-# @csrf_exempt
-# def car_model_list(request, make_id):
-#     # Add code to return a list of car models for a given car make id
 
 @csrf_exempt
 def car_model_list(request, make_id):
