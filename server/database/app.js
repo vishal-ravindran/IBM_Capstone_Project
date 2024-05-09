@@ -1,4 +1,4 @@
-/*jshint esversion: 6 */
+/*jshint esversion: 8 */
 const express = require('express');
 const mongoose = require('mongoose');
 const fs = require('fs');
@@ -13,11 +13,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 const reviews_data = JSON.parse(fs.readFileSync("reviews.json", 'utf8'));
 const dealerships_data = JSON.parse(fs.readFileSync("dealerships.json", 'utf8'));
 
-mongoose.connect("mongodb://mongo_db:27017/",{'dbName':'dealershipsDB'});
-
+mongoose.connect("mongodb://mongo_db:27017/", {'dbName': 'dealershipsDB'});
 
 const Reviews = require('./review');
-
 const Dealerships = require('./dealership');
 
 try {
@@ -25,14 +23,13 @@ try {
     Reviews.insertMany(reviews_data.reviews);
   });
   Dealerships.deleteMany({}).then(() => {
-    Dealerships.insertMany(dealerships_data['dealerships']);
+    Dealerships.insertMany(dealerships_data.dealerships); // Replaced array notation with dot notation
   });
   
 } catch (error) {
   console.log(error);
   res.status(500).json({ error: 'Error fetching documents' });
 }
-
 
 // Express route to home
 app.get('/', async (req, res) => {
@@ -94,22 +91,22 @@ app.get('/fetchDealer/:id', async (req, res) => {
     }
 });
 
-//Express route to insert review
+// Express route to insert review
 app.post('/insert_review', express.raw({ type: '*/*' }), async (req, res) => {
   data = JSON.parse(req.body);
   const documents = await Reviews.find().sort({ id: -1 });
-  let new_id = documents[0]['id'] + 1;
+  let new_id = documents[0].id + 1; // Replaced array notation with dot notation
 
   const review = new Reviews({
-    "id": new_id,
-    "name": data['name'],
-    "dealership": data['dealership'],
-    "review": data['review'],
-    "purchase": data['purchase'],
-    "purchase_date": data['purchase_date'],
-    "car_make": data['car_make'],
-    "car_model": data['car_model'],
-    "car_year": data['car_year'],
+    id: new_id, // Replaced array notation with dot notation
+    name: data.name, // Replaced array notation with dot notation
+    dealership: data.dealership, // Replaced array notation with dot notation
+    review: data.review, // Replaced array notation with dot notation
+    purchase: data.purchase, // Replaced array notation with dot notation
+    purchase_date: data.purchase_date, // Replaced array notation with dot notation
+    car_make: data.car_make, // Replaced array notation with dot notation
+    car_model: data.car_model, // Replaced array notation with dot notation
+    car_year: data.car_year, // Replaced array notation with dot notation
   });
 
   try {
