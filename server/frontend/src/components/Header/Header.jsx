@@ -11,11 +11,12 @@ const Header = () => {
     });
   
     const json = await res.json();
+    console.log("json", json)
     if (json) {
       let username = sessionStorage.getItem('username');
       sessionStorage.removeItem('username');
       window.location.href = window.location.origin;
-      window.location.reload();
+    //   window.location.reload();
       alert("Logging out "+username+"...")
     }
     else {
